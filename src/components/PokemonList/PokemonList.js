@@ -4,6 +4,8 @@ import PokemonCard from '../PokemonCard/PokemonCard';
 
 const PokemonList = () => {
   const { pokemons, loading } = usePokemonData();
+  // max stats for each stats
+  console.log(pokemons[0]?.stats?.map(x => x.name));
   const [searchTerm, setSearchTerm] = useState('');
   const [selectType, setSelectType] = useState('all');
   const [selectGen, setSelectGen] = useState('all');

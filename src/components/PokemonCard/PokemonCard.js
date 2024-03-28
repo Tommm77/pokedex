@@ -33,7 +33,7 @@ const PokemonCard = ({ pokemon }) => {
   const gradientClass = getTypeGradient(pokemon.types);
 
   return (
-    <Link to={{ pathname: `/pokemon/${pokemon.pokedex_id}`, state: { pokemon } }}>
+    <Link to={`/pokemon/${pokemon.pokedex_id}`} state={{ pokemon }}>
     <div className={`group rounded-xl overflow-hidden shadow-lg bg-gradient-to-b ${gradientClass} text-white p-4 m-2 flex flex-col justify-between transform transition duration-100 hover:scale-110 relative`}>
       <div className="absolute top-2 right-2 flex space-x-1">
         {pokemon.types?.map((type, index) => (

@@ -124,7 +124,9 @@ const Map = () => {
                 // Vérification pour la rencontre de Pokémon dans les buissons
                 if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
                     console.log('Un Pokémon sauvage apparaît !');
-                alert('Un Pokémon sauvage apparaît !');
+                    setTimeout(() => {
+                      alert('Un Pokémon sauvage apparaît !');
+                    }, 10); // setTimeout pour laisser le temps à l'état de se mettre à jour
                 }
             }
           }
@@ -153,9 +155,9 @@ const Map = () => {
   };
 
   return (
-    <div className="grid">
+    <div className="grid2">
       {grid.map((row, rowIndex) => (
-        <div key={rowIndex} className="row">
+        <div key={rowIndex} className="row2">
           {row.map((color, colIndex) => (
             <div key={`${rowIndex}-${colIndex}`} className={`cell ${color}`}>
               {playerPosition.x === colIndex && playerPosition.y === rowIndex && (

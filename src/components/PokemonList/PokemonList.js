@@ -7,6 +7,21 @@ const PokemonList = ({pokemons}) => {
   const [selectGen, setSelectGen] = useState('all');
   const [filter, setFilter] = useState([]);
   const [type, setType] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
+
+const toggleShowFavorites = () => {
+  setShowFavorites(!showFavorites);
+};
+
+useEffect(() => {
+  if (showFavorites) {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const filteredPokemons = pokemons.filter(pokemon => favorites.includes(pokemon.pokedex_id));
+    setFilter(filteredPokemons);
+  } else {
+    setFilter([...pokemons]);
+  }
+}, [pokemons, showFavorites]);
 
   useEffect(() => {
     setFilter([...pokemons]);
@@ -112,6 +127,12 @@ const PokemonList = ({pokemons}) => {
             ))}
           </select>
             }
+      <button
+        onClick={toggleShowFavorites}
+        className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center"
+      >
+        {showFavorites ? 'Voir Tous' : 'Voir Favoris'}
+      </button>
         </div>
       </div>
       {/* Grille de cartes avec marges latérales */}

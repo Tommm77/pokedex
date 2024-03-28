@@ -9,7 +9,7 @@ const fetchPokemons = async () => {
         'Content-type': 'application/json',
       },
     });
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des Pokémon :', error);

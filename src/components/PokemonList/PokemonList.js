@@ -5,8 +5,8 @@ import PokemonCard from '../PokemonCard/PokemonCard';
 const PokemonList = () => {
   const { pokemons, loading } = usePokemonData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectType, setSelectType] = useState('');
-  const [selectGen, setSelectGen] = useState('');
+  const [selectType, setSelectType] = useState('all');
+  const [selectGen, setSelectGen] = useState('all');
   const [filter, setFilter] = useState([]);
   const [type, setType] = useState([]);
 
@@ -18,15 +18,14 @@ const PokemonList = () => {
   const ArrayGen = Array.from(Array(9).keys())
 
   const getSelector = (value) => {
-    setSelectType(value.toString());
+    setSelectType(value);
     let tmp_filter = [...pokemons];
     if (searchTerm){
       tmp_filter = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(searchTerm.toLowerCase()))
     }
-    /*
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
-    }*/
+    }
 
     if (value === 'all') {
       setFilter(tmp_filter)
@@ -44,22 +43,22 @@ const PokemonList = () => {
   const getSearchTerms = (value) => {
     setSearchTerm(value);
     let tmp_filter = [...pokemons]
+    
     if (selectType !== 'all') {
-     tmp_filter = tmp_filter.slice().filter( x =>{
+      tmp_filter = tmp_filter.slice().filter( x =>{
         const tmp = x.types?.map(y => y.name);
         return tmp?.includes(selectType);
       })
     }
-/*
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
-    }*/
+    }
     const res = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(value.toLowerCase()))
     setFilter(res);
   }
 
   const getSelectGen = (value) => {
-    setSelectGen(value);
+    setSelectGen(value.toString());
     let tmp_filter = [...pokemons]
     if (selectType !== 'all') {
       tmp_filter = tmp_filter.slice().filter( x =>{
@@ -73,8 +72,7 @@ const PokemonList = () => {
     if (value === 'all') {
       setFilter(tmp_filter);
     }else {
-      const res = tmp_filter.slice().filter( (x) => x.generation.toString() === value );
-      console.log(selectType, searchTerm, res.length)
+      const res = tmp_filter.slice().filter( (x) => x.generation.toString() === value.toString() );
       setFilter(res)
     }
   }
@@ -110,14 +108,14 @@ const PokemonList = () => {
               <option key={type.name} value={type.name}>{type.name}</option>
             ))}
           </select>
-          {/*
+          {
           <select value={selectGen} onChange={ (e) => getSelectGen(e.target.value)} className="p-2 border rounded ml-4">
             <option value={'all'}>toutes</option>
             {ArrayGen.map((gen) => (
               <option key={gen} value={gen+1}>{gen+1}</option>
             ))}
           </select>
-            */}
+            }
         </div>
       </div>
       {/* Grille de cartes avec marges latérales */}

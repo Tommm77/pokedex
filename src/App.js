@@ -18,8 +18,8 @@ function App() {
       <main>
         <BrowserRouter>
           <Routes>
-            <Route path="/Home" element={<Map />} />
-            <Route path="/" element={<PokemonList pokemons={pokemons}/>} />
+            <Route path="/" element={<Map />} />
+            <Route path="/pokedex" element={<PokemonList pokemons={pokemons}/>} />
             <Route path="/pokemon/:id" element={<PokemonDetails />} />
             <Route path="/fight/:id?" element={<Fight pokemons={pokemons}/>} />
           </Routes>

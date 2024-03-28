@@ -72,7 +72,7 @@ const generateGrid = () => {
 };
 
 
-const Map = () => {
+const PokemonHome = () => {
   const [grid, setGrid] = useState(() => {
     const savedGrid = localStorage.getItem('pokemonGrid');
     return savedGrid ? JSON.parse(savedGrid) : generateGrid();
@@ -93,19 +93,10 @@ const Map = () => {
   const handleNewMap = () => {
     const newGrid = generateGrid();
     setGrid(newGrid);
-    localStorage.setItem('pokemonGrid', JSON.stringify(newGrid));
+    setPlayerPosition({ x: parseInt(gridSize / 2), y: parseInt(gridSize / 2) })
+    localStorage.setItem('playerPosition', JSON.stringify({ x: parseInt(gridSize / 2), y: parseInt(gridSize / 2) }));
+    localStorage.setItem('playerDirection', 'down');
   };
-  useEffect(() => {
-    // Tentative de récupération de la grille depuis le localStorage
-    const savedGrid = localStorage.getItem('pokemonGrid');
-    if (savedGrid) {
-      setGrid(JSON.parse(savedGrid));
-    } else {
-      const newGrid = generateGrid();
-      setGrid(newGrid);
-      localStorage.setItem('pokemonGrid', JSON.stringify(newGrid));
-    }
-  }, []);
   
   // À chaque fois que la grille change, l'enregistrer dans le localStorage
   useEffect(() => {
@@ -156,7 +147,7 @@ const Map = () => {
           // Mettre à jour la position et la direction du joueur
           if (grid[newY][newX] !== 'blue') {
             setPlayerPosition({ x: newX, y: newY });
-            localStorage.setItem('playerPosition', JSON.stringify(playerPosition));
+            localStorage.setItem('playerPosition', JSON.stringify({ x: newX, y: newY }));
             setPlayerDirection(direction);
             console.log('couleur non bleu');
             if (newX !== playerPosition.x || newY !== playerPosition.y) {
@@ -262,4 +253,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default PokemonHome;

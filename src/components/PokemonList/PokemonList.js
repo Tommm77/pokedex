@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import usePokemonData from '../../hooks/usePokemonData';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
-const PokemonList = () => {
-  const { pokemons, loading } = usePokemonData();
-  // max stats for each stats
-  console.log(pokemons[0]?.stats?.map(x => x.name));
+const PokemonList = ({pokemons}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectType, setSelectType] = useState('all');
   const [selectGen, setSelectGen] = useState('all');
@@ -78,8 +74,6 @@ const PokemonList = () => {
       setFilter(res)
     }
   }
-
-  if (loading) return <div className="text-center">Chargement...</div>;
 
   return (
     <div className="relative">

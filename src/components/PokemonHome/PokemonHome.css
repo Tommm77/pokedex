@@ -1,10 +1,16 @@
-.grid2 {
-  display: flex;
-  flex-direction: column;
+.pokemon-home-container {
+  text-align: center; /* Centre le titre et tout le contenu */
 }
 
-.row2 {
-  display: flex;
+.header_home {
+  padding: 20px 0; /* Ajoute un peu d'espace autour du titre */
+  background-color: #f8f9fa; /* Une couleur de fond légère pour le header */
+  margin-bottom: 20px; /* Espace avant le contenu principal */
+}
+
+.title {
+  font-size: 2.5rem; /* Grande taille pour le titre */
+  color: #333; /* Couleur foncée pour le texte */
 }
 
 .cell {
@@ -12,17 +18,19 @@
   height: 20px;
 }
 
-.gray {
+.cell_gray {
   background-image: url('../../assets/gris.png');
 }
 
-.green {
+.cell_green {
   background-image: url('../../assets/vert.png');
   background-size: cover;
 }
 
-.blue {
-  background-color: blue;
+.cell_blue {
+  background-image: url('../../assets/bleu.png');
+  /* background-size: cover; */
+  /* background-color: blue; */
 }
 
 .player-img {
@@ -30,22 +38,36 @@
   height: 20px;
   object-fit: cover; /* Cela garantit que l'image couvre la cellule sans déformation */
 }
-/* .player-up {
-  background-image: url('../../assets/joueur_up.png');
-  background-size: cover;
+
+@keyframes zoomIntoBattle {
+  0% {
+    opacity: 1;
+    background-color: transparent;
+  }
+  30% {
+    opacity: 0.8;
+    background-size: 150%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('../../assets/vert.png');
+  }
+  60% {
+    opacity: 0;
+    background-color: black;
+  }
+  100% {
+    opacity: 1;
+    background-color: black;
+  }
 }
 
-.player-down {
-  background-image: url('../../assets/joueur_down.png');
-  background-size: cover;
+.battleAnimation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  animation: zoomIntoBattle 1.5s forwards;
 }
 
-.player-left {
-  background-image: url('../../assets/joueur_left.png');
-  background-size: cover;
-}
-
-.player-right {
-  background-image: url('../../assets/joueur_right.png');
-  background-size: cover;
-} */

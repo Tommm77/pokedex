@@ -95,7 +95,7 @@ const PokemonList = () => {
             type="text"
             placeholder="Rechercher..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => getSearchTerms(e.target.value)}
             className="pl-10 p-2 border rounded-xl w-96 bg-gray-200 placeholder-gray-100"
           />
           <div className="absolute top-0 left-0 mt-2 ml-3">

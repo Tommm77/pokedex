@@ -43,7 +43,7 @@ const PokemonList = () => {
   const getSearchTerms = (value) => {
     setSearchTerm(value);
     let tmp_filter = [...pokemons]
-    
+
     if (selectType !== 'all') {
       tmp_filter = tmp_filter.slice().filter( x =>{
         const tmp = x.types?.map(y => y.name);
@@ -97,20 +97,20 @@ const PokemonList = () => {
             placeholder="Rechercher..."
             value={searchTerm}
             onChange={(e) => getSearchTerms(e.target.value)}
-            className="pl-10 p-2 border rounded-xl w-96 bg-gray-200 placeholder-gray-100"
+            className="pl-10 p-2 border  h-10 rounded-xl w-96 bg-gray-200 placeholder-gray-100"
           />
           <div className="absolute top-0 left-0 mt-2 ml-3">
             🔍
           </div>
-          <select value={selectType} onChange={ (e) => getSelector(e.target.value)} className="p-2 border rounded ml-4">
-            <option value={'all'}>tout</option>
+          <select value={selectType} onChange={ (e) => getSelector(e.target.value)} className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center">
+            <option value={'all'}>Type</option>
             {type.map((type) => (
               <option key={type.name} value={type.name}>{type.name}</option>
             ))}
           </select>
           {
-          <select value={selectGen} onChange={ (e) => getSelectGen(e.target.value)} className="p-2 border rounded ml-4">
-            <option value={'all'}>toutes</option>
+          <select value={selectGen} onChange={ (e) => getSelectGen(e.target.value)} className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center">
+            <option value={'all'}>Génération</option>
             {ArrayGen.map((gen) => (
               <option key={gen} value={gen+1}>{gen+1}</option>
             ))}

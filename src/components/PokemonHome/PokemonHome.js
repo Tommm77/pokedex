@@ -155,18 +155,20 @@ const Map = () => {
   };
 
   return (
-    <div className="grid">
-      {grid.map((row, rowIndex) => (
-        <div key={rowIndex} className="row flex">
-          {row.map((color, colIndex) => (
-            <div key={`${rowIndex}-${colIndex}`} className={`cell cell_${color}`}>
-              {playerPosition.x === colIndex && playerPosition.y === rowIndex && (
-                <img src={playerImages[playerDirection]} alt="Player" className="player-img" />
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
+    <div className="flex justify-center items-center h-screen">
+      <div className="grid">
+        {grid.map((row, rowIndex) => (
+          <div key={rowIndex} className="row flex">
+            {row.map((color, colIndex) => (
+              <div key={`${rowIndex}-${colIndex}`} className={`cell cell_${color}`}>
+                {playerPosition.x === colIndex && playerPosition.y === rowIndex && (
+                  <img src={playerImages[playerDirection]} alt="Player" className="player-img" />
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

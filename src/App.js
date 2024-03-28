@@ -5,6 +5,7 @@ import PokemonDetails from './components/PokemonDetails/PokemonDetails';
 import './App.css';
 import Fight from './components/Fight/Fight';
 import usePokemonData from './hooks/usePokemonData';
+import Map from './components/PokemonHome/PokemonHome';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <main>
         <BrowserRouter>
           <Routes>
+            <Route path="/Home" element={<Map />} />
             <Route path="/" element={<PokemonList pokemons={pokemons}/>} />
             <Route path="/pokemon/:id" element={<PokemonDetails />} />
             <Route path="/fight/:id?" element={<Fight pokemons={pokemons}/>} />

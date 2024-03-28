@@ -63,3 +63,78 @@
   animation: shimmer 2s infinite;
 }
 
+.fdp {
+  z-index: 1;
+}
+
+.filter-Normal {
+  filter: invert(42%) sepia(24%) saturate(237%) hue-rotate(180deg) brightness(98%) contrast(87%);
+}
+
+.filter-Plante {
+  filter: invert(56%) sepia(87%) saturate(421%) hue-rotate(90deg) brightness(93%) contrast(89%);
+}
+
+.filter-Feu {
+  filter: invert(51%) sepia(41%) saturate(2937%) hue-rotate(326deg) brightness(87%) contrast(120%);
+}
+
+.filter-Eau {
+  filter: invert(39%) sepia(82%) saturate(1688%) hue-rotate(203deg) brightness(100%) contrast(94%);
+}
+
+.filter-Électrik {
+  filter: invert(60%) sepia(97%) saturate(602%) hue-rotate(6deg) brightness(101%) contrast(96%);
+}
+
+.filter-Glace {
+  filter: invert(62%) sepia(50%) saturate(2977%) hue-rotate(146deg) brightness(92%) contrast(96%);
+}
+
+.filter-Combat {
+  filter: invert(50%) sepia(46%) saturate(2647%) hue-rotate(353deg) brightness(100%) contrast(95%);
+}
+
+.filter-Poison {
+  filter: invert(37%) sepia(67%) saturate(844%) hue-rotate(232deg) brightness(110%) contrast(95%);
+}
+
+.filter-Sol {
+  filter: invert(46%) sepia(88%) saturate(5586%) hue-rotate(35deg) brightness(96%) contrast(94%);
+}
+
+.filter-Vol {
+  filter: invert(76%) sepia(92%) saturate(3098%) hue-rotate(170deg) brightness(102%) contrast(95%);
+}
+
+.filter-Psy {
+  filter: invert(57%) sepia(83%) saturate(3926%) hue-rotate(302deg) brightness(92%) contrast(101%);
+}
+
+.filter-Insecte {
+  filter: invert(80%) sepia(15%) saturate(4684%) hue-rotate(34deg) brightness(96%) contrast(84%);
+}
+
+.filter-Roche {
+  filter: invert(25%) sepia(79%) saturate(1181%) hue-rotate(11deg) brightness(95%) contrast(88%);
+}
+
+.filter-Spectre {
+  filter: invert(38%) sepia(79%) saturate(2221%) hue-rotate(222deg) brightness(97%) contrast(95%);
+}
+
+.filter-Dragon {
+  filter: invert(16%) sepia(62%) saturate(6311%) hue-rotate(271deg) brightness(84%) contrast(93%);
+}
+
+.filter-Ténèbres {
+  filter: invert(10%) sepia(58%) saturate(465%) hue-rotate(174deg) brightness(93%) contrast(87%);
+}
+
+.filter-Acier {
+  filter: invert(67%) sepia(8%) saturate(406%) hue-rotate(177deg) brightness(95%) contrast(90%);
+}
+
+.filter-Fée {
+  filter: invert(94%) sepia(43%) saturate(2828%) hue-rotate(279deg) brightness(96%) contrast(102%);
+}

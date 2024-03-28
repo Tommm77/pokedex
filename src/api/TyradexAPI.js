@@ -4,7 +4,6 @@ const fetchPokemons = async () => {
   try {
     const response = await axios.get(`https://tyradex.tech/api/v1/pokemon`, {
       headers: {
-        'User-Agent': 'MonPokedexReactApp',
         'From': 'monemail@example.com',
         'Content-type': 'application/json',
       },

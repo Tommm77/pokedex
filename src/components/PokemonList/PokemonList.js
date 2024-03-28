@@ -82,12 +82,15 @@ const PokemonList = () => {
   if (loading) return <div className="text-center">Chargement...</div>;
 
   return (
-    <div className="absolute">
-      <div className="absolute -top-10 -right-20 z-0">
-        <img src="https://www.pngall.com/wp-content/uploads/4/Pokeball-PNG-Free-Download.png" alt="Pokeball" className="opacity-10 h-full w-full" />
-      </div>
+    <div className="relative">
+    {/* Conteneur pour le cropping de l'image */}
+    <div className="overflow-hidden absolute top-0 right-0 z-0 -mr-100" style={{ width: '100%', height: '100vh', maxWidth: '100vw' }}>
+      <img src="https://www.pngall.com/wp-content/uploads/4/Pokeball-PNG-Free-Download.png" alt="Pokeball" className="opacity-10" style={{ width: '800px', height: 'auto', transform: 'translate(120%, -7%)' }} />
+    </div>
 
-      <h1 className="text-4xl text-center my-8 z-10 relative">Pokedex</h1>
+    {/* Contenu principal de la page */}
+    <div className="mx-auto max-w-screen-xl mt-20">
+      {/* Image absolument positionnée qui ne devrait pas impacter le layout global */}
       {/* Barre de recherche avec icône de loupe */}
       <div className="flex justify-center mb-4 rounded-xl z-10 relative">
         <div className="relative">
@@ -118,12 +121,13 @@ const PokemonList = () => {
         </div>
       </div>
       {/* Grille de cartes avec marges latérales */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 mx-48 z-10 relative">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
         {filter.map(pokemon => (
           <PokemonCard key={pokemon.pokedex_id} pokemon={pokemon} />
         ))}
       </div>
     </div>
+  </div>
   );
 };
 

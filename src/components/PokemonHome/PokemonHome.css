@@ -12,17 +12,19 @@
   height: 20px;
 }
 
-.gray {
+.cell_gray {
   background-image: url('../../assets/gris.png');
 }
 
-.green {
+.cell_green {
   background-image: url('../../assets/vert.png');
   background-size: cover;
 }
 
-.blue {
-  background-color: blue;
+.cell_blue {
+  background-image: url('../../assets/bleu.png');
+  /* background-size: cover; */
+  /* background-color: blue; */
 }
 
 .player-img {
@@ -30,22 +32,3 @@
   height: 20px;
   object-fit: cover; /* Cela garantit que l'image couvre la cellule sans déformation */
 }
-/* .player-up {
-  background-image: url('../../assets/joueur_up.png');
-  background-size: cover;
-}
-
-.player-down {
-  background-image: url('../../assets/joueur_down.png');
-  background-size: cover;
-}
-
-.player-left {
-  background-image: url('../../assets/joueur_left.png');
-  background-size: cover;
-}
-
-.player-right {
-  background-image: url('../../assets/joueur_right.png');
-  background-size: cover;
-} */

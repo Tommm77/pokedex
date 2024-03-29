@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import './Fight.css';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const Fight = ({pokemons}) => {
     const  {id} = useParams();
     const [PokemonUser, LoadingUser] = useState([...pokemons][151])
@@ -13,6 +15,20 @@ const Fight = ({pokemons}) => {
     const [positionOp, setPositionOp] = useState({ x: 0, y: 0 });
     const [positionUser, setPositionUser] = useState({ x: 0, y: 0 });
     const [StateAtk, setStateAtk] = useState(true);
+
+    useEffect(() => {
+        if (id) {
+            if (id > 0 && id < 1025){
+                LoadingUser([...pokemons][id])
+            }else {
+                LoadingUser([...pokemons][151])
+            }
+            const randomId = Math.floor(Math.random() * 1025) + 1;
+            LoadingOpponent([...pokemons][randomId])
+        }else {
+            navigate(`/pokedex`);
+        }
+    }, []);
 
     const handleMoveOp = () => {
         // Logique pour déplacer l'image, par exemple, augmenter la valeur de x et y
@@ -104,16 +120,6 @@ const Fight = ({pokemons}) => {
         }
     }
 
-    useEffect(() => {
-        if (id) {
-            LoadingUser([...pokemons][id])
-            const randomId = Math.floor(Math.random() * 1025) + 1;
-            LoadingOpponent([...pokemons][randomId])
-        }else {
-            navigate(`/pokedex`);
-        }
-    }, []);
-
     const AtkUser = (type) => {
         if (StateAtk) {
             setStateAtk(false);
@@ -171,7 +177,8 @@ const Fight = ({pokemons}) => {
             <div className='grid grid-cols-6 mt-20'>
                 <div className='col-start-2 col-span-2 border-t-2 border-l-2 border-black rounded-tl-md pt-2'></div>
                 {/*pokemon opponent*/}
-                <div className='col-start-4 col-span-2 border-t-2 border-r-2 border-black rounded-tr-md pt-2'>
+                <div className='col-start-4 col-span-2 border-t-2 border-r-2 border-black rounded-tr-md pt-2' 
+                style={{background: 'linear-gradient(to bottom left, red, rgba(255, 255, 255, 0) 50%)'}}>
                     <div className='grid gril-cols-2'>
                         <div className='col-start-1 '> 
                             <div style={{width: '10em', marginLeft: '2em'}}>
@@ -206,7 +213,8 @@ const Fight = ({pokemons}) => {
                 </div>
 
                 {/*pokemon user*/}
-                <div className='col-start-2 col-span-2 border-l-2 border-black pb-4'>
+                <div className='col-start-2 col-span-2 border-l-2 border-black pb-4' 
+                style={{background: 'linear-gradient(to top right, grey, rgba(255, 255, 255, 0) 50%)'}}>
                     <div className='grid gril-cols-2'>
                         <div className='col-start-1'>
                             <img 

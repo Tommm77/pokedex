@@ -12,6 +12,7 @@ const Fight = ({pokemons}) => {
     const [consoleInfo, SetConsole] = useState(['début du combat...'])
     const [positionOp, setPositionOp] = useState({ x: 0, y: 0 });
     const [positionUser, setPositionUser] = useState({ x: 0, y: 0 });
+    const [StateAtk, setStateAtk] = useState(true);
 
     const handleMoveOp = () => {
         // Logique pour déplacer l'image, par exemple, augmenter la valeur de x et y
@@ -75,13 +76,16 @@ const Fight = ({pokemons}) => {
             pokemonAtk = PokemonOpponent
             pokemonDef = PokemonUser
         }
-        let atk = (parseInt(pokemonAtk.stats.atk) / parseInt(pokemonDef.stats.def)) * 5;
+        let atk = (parseInt(pokemonAtk.stats.atk) / parseInt(pokemonDef.stats.def)) * 5.0;
         const typeAtk = pokemonAtk.types.map((x) => x.name)
         const resist = pokemonDef.resistances.filter( (x) => typeAtk.includes(x.name)).map( x=> parseFloat(x.multiplier))
         resist.reduce( (acc, x) => acc * x )
         const random = Math.floor(Math.random() * 5) + 1;
-        atk *= resist.reduce((acc, x) => acc * x )
-        return Math.round(atk * random);
+        if (resist === 0) {
+            return Math.floor(atk * 0.75 * random);
+        } else{
+            return Math.round(atk * random * resist.reduce((acc, x) => acc * x ) + 3);
+        }
     }
 
     const getStatWidth = (life, damage) => {
@@ -111,27 +115,30 @@ const Fight = ({pokemons}) => {
     }, []);
 
     const AtkUser = (type) => {
-        let tmp_damage = damageOpponent;
-        let tmp_console = PokemonUser.name.fr;
-        if (type == 1) {
-            tmp_damage += 10
-            tmp_console += ' utilse attaque charge de 10'
-        } else if (type == 2) {
-            const calcul = CalculDamage(1)
-            tmp_damage += calcul;
-            tmp_console += ' utilse attaque spé de '+calcul.toFixed(2)
-        }
-        SetdamageOpponent(tmp_damage)
-        handleMoveUser()
-        if (tmp_damage >= PokemonOpponent.stats.hp){
-            SetConsole(['gagné', PokemonOpponent.name.fr+' est mort'])
-            setTimeout(() => {
-                navigate(`/`+PokemonUser.pokedex_id);
-            }, 5000);
-        }else{
-            const tmp_console_all = [...[tmp_console], ...consoleInfo]
-            SetConsole(tmp_console_all)
-            setTimeout(() => { BOTOpponent(tmp_console_all);}, 500);
+        if (StateAtk) {
+            setStateAtk(false);
+            let tmp_damage = damageOpponent;
+            let tmp_console = PokemonUser.name.fr;
+            if (type == 1) {
+                tmp_damage += 10
+                tmp_console += ' utilse attaque charge de 10'
+            } else if (type == 2) {
+                const calcul = CalculDamage(1)
+                tmp_damage += calcul;
+                tmp_console += ' utilse attaque spé de '+calcul.toFixed(2)
+            }
+            SetdamageOpponent(tmp_damage)
+            handleMoveUser()
+            if (tmp_damage >= PokemonOpponent.stats.hp){
+                SetConsole(['gagné', PokemonOpponent.name.fr+' est mort'])
+                setTimeout(() => {
+                    navigate(`/`+PokemonUser.pokedex_id);
+                }, 5000);
+            }else{
+                const tmp_console_all = [...[tmp_console], ...consoleInfo]
+                SetConsole(tmp_console_all)
+                setTimeout(() => { BOTOpponent(tmp_console_all); setStateAtk(true)}, 500);
+            }
         }
     }
 
@@ -162,10 +169,11 @@ const Fight = ({pokemons}) => {
     return (
         <div className='container-battle'>
             <div className='grid grid-cols-6 mt-20'>
+                <div className='col-start-2 col-span-2 border-t-2 border-l-2 border-black rounded-tl-md pt-2'></div>
                 {/*pokemon opponent*/}
-                <div className='col-start-4 col-span-2'>
+                <div className='col-start-4 col-span-2 border-t-2 border-r-2 border-black rounded-tr-md pt-2'>
                     <div className='grid gril-cols-2'>
-                        <div className='col-start-1'> 
+                        <div className='col-start-1 '> 
                             <div style={{width: '10em', marginLeft: '2em'}}>
                                 <div className='w-full flex'>
                                     <p className='text-xl'>{PokemonOpponent.name.fr}</p>
@@ -198,7 +206,7 @@ const Fight = ({pokemons}) => {
                 </div>
 
                 {/*pokemon user*/}
-                <div className='col-start-2 col-span-2'>
+                <div className='col-start-2 col-span-2 border-l-2 border-black pb-4'>
                     <div className='grid gril-cols-2'>
                         <div className='col-start-1'>
                             <img 
@@ -235,10 +243,11 @@ const Fight = ({pokemons}) => {
                         </div>
                     </div>
                 </div>
+                <div className='col-start-4 col-span-2 border-r-2 border-black pb-4'></div>
 
                 {/*console*/}
-                <div className='col-start-2 col-span-4 mt-2'>
-                    <div className='grid grid-col-2 mt-10'>
+                <div className='col-start-2 col-span-4'>
+                    <div className='grid grid-col-2'>
                         <div className='col-start-1 w-full border-2 border-black rounded-lg p-1'>
                             <p className='flex underline'>console:</p>
                             <div>

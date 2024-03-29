@@ -113,7 +113,19 @@ const handleNextPokemon = () => {
       <div className="flex-1 text-center mt-32">
       <div className="flex flex-col items-center">
   <h1 className="text-2xl font-bold mb-0">{pokemon.name.fr}</h1>
-  <img src={pokemon.sprites.regular} alt={pokemon.name.fr} className="z-1 w-1/2 md:w-full lg:w-3/4 -mt-16 fdp" />
+  <div className="text-sm mb-4">
+      <span className="font-semibold">ID: {pokemon.pokedex_id}</span>
+      {/* Assurez-vous que l'information de génération est disponible dans votre objet pokemon */}
+      <span className="font-semibold ml-4">Génération: {pokemon.generation}</span>
+    </div>
+  <img
+  src={pokemon.sprites.regular}
+  alt={pokemon.name.fr}
+  onMouseEnter={(e) => e.currentTarget.src = pokemon.sprites.shiny}
+  onMouseLeave={(e) => e.currentTarget.src = pokemon.sprites.regular}
+  className="z-1 w-1/2 md:w-full lg:w-3/4 -mt-16 fdp"
+/>
+
 </div>
 <div className="flex justify-center flex-wrap mt-2">
   {pokemon.types.map((type, index) => (

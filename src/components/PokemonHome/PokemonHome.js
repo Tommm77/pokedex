@@ -158,7 +158,7 @@ const PokemonHome = () => {
                       // alert('Un Pokémon sauvage apparaît !');
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
-                        navigate('/Fight');
+                        navigate('/Fight/');
                       }, 1500);
                     }, 10);
                 }

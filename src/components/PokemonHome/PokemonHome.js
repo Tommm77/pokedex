@@ -90,6 +90,7 @@ const PokemonHome = () => {
   });
   
   const [showAnimation, setShowAnimation] = useState(false);
+  const [isCombat, setIsCombat] = useState(false);
 
   const navigate = useNavigate();
   const handleNewMap = () => {
@@ -107,6 +108,9 @@ const PokemonHome = () => {
 
   useEffect(() => {
     const movePlayer = (e) => {
+      if (isCombat) {
+        return;
+      }
       let newX = playerPosition.x;
       let newY = playerPosition.y;
       let direction = playerDirection;
@@ -156,8 +160,8 @@ const PokemonHome = () => {
                 // Vérification pour la rencontre de Pokémon dans les buissons
                 if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
                     console.log('Un Pokémon sauvage apparaît !');
+                    setIsCombat(true);
                     setTimeout(() => {
-                      // alert('Un Pokémon sauvage apparaît !');
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
                         if (id) {

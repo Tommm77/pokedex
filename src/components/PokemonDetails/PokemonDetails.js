@@ -29,6 +29,11 @@ const PokemonDetails = () => {
     }
   };
 
+  const handleFight = () => {
+    navigate(`/Fight/${pokemon.pokedex_id}`);
+  };
+
+
   const handleAnimationEnd = () => {
     setIsAnimating(false);
   };
@@ -65,7 +70,7 @@ const PokemonDetails = () => {
 
 
   const handleBackToPokedex = () => {
-    navigate("/");
+    navigate("/Pokedex");
   };
 
   return (
@@ -73,6 +78,9 @@ const PokemonDetails = () => {
       <button onClick={handleBackToPokedex} className={`absolute top-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
   ← Pokedex
 </button>
+<button onClick={handleFight} className={`absolute top-4 left-2 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100 ml-32`}>
+       ⚔️ Combat
+      </button>
 <div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd}
         className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
       </div>

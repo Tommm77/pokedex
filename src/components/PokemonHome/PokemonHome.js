@@ -160,8 +160,8 @@ const PokemonHome = () => {
                 // Vérification pour la rencontre de Pokémon dans les buissons
                 if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
                     console.log('Un Pokémon sauvage apparaît !');
+                    setIsCombat(true);
                     setTimeout(() => {
-                      setIsCombat(true);
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
                         if (id) {

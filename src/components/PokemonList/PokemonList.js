@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
 const PokemonList = ({pokemons}) => {
@@ -6,7 +6,7 @@ const PokemonList = ({pokemons}) => {
   const [selectType, setSelectType] = useState('all');
   const [selectGen, setSelectGen] = useState('all');
   const [filter, setFilter] = useState([...pokemons]);
-  const [type, setType] = useState([...pokemons][1]?.resistances ?? []);
+  const [type] = useState([...pokemons][1]?.resistances ?? []);
   const [showFavorites, setShowFavorites] = useState(true);
 
   const ArrayGen = Array.from(Array(9).keys())
@@ -167,14 +167,14 @@ const PokemonList = ({pokemons}) => {
       </button>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-      {filter.map((pokemon, index) => (
-        <PokemonCard
-          key={pokemon.pokedex_id}
-          pokemon={pokemon}
-          pokemons={filter}
-          index={index}
-        />
-      ))}
+      {filter.slice(1).map((pokemon, index) => (
+  <PokemonCard
+    key={pokemon.pokedex_id}
+    pokemon={pokemon}
+    pokemons={filter}
+    index={index}
+  />
+))}
       </div>
     </div>
   </div>

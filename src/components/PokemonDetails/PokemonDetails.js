@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-const getFilterClassName = (type) => `filter-${type}`;
+import './FavAnimation.css'
 
 const PokemonDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { pokemon } = location.state || {};
+  const getFilterClassName = (type) => `filter-${type}`;
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setIsFavorite(favorites.includes(pokemon.pokedex_id));
+  }, [pokemon.pokedex_id]);
+
+
+  const handleToggleFavorite = () => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if (favorites.includes(pokemon.pokedex_id)) {
+      const filteredFavorites = favorites.filter(id => id !== pokemon.pokedex_id);
+      localStorage.setItem('favorites', JSON.stringify(filteredFavorites));
+      setIsFavorite(false);
+    } else {
+      setIsAnimating(true);
+      localStorage.setItem('favorites', JSON.stringify([...favorites, pokemon.pokedex_id]));
+      setIsFavorite(true);
+    }
+  };
+
+  const handleAnimationEnd = () => {
+    setIsAnimating(false);
+  };
+
 
   if (!pokemon) return <div>Aucun Pokémon sélectionné.</div>;
+
 
   // Définition des couleurs des types pour les barres de stats et les bordures des types
   const typeColors = {
@@ -46,6 +73,11 @@ const PokemonDetails = () => {
       <button onClick={handleBackToPokedex} className={`absolute top-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
   ← Pokedex
 </button>
+<div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd}
+        className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
+      </div>
+
+
       <div className="flex-1 text-center mt-32">
       <div className="flex flex-col items-center">
   <h1 className="text-2xl font-bold mb-0">{pokemon.name.fr}</h1>
@@ -108,6 +140,11 @@ const PokemonDetails = () => {
     ))}
   </div>
 </div>
+
+
+
+
+
 
       </div>
       <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${filterClassName}`} style={{width: '51rem'}}>

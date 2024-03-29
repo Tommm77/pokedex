@@ -114,17 +114,18 @@ const PokemonList = ({pokemons}) => {
     }
   };
 
+  const DeleteFavorite = () => {
+    localStorage.removeItem('favorites');
+    toggleShowFavorites();
+  }
+
   return (
     <div className="relative">
-    {/* Conteneur pour le cropping de l'image */}
     <div className="overflow-hidden absolute top-0 right-0 z-0 -mr-100" style={{ width: '100%', height: '100vh', maxWidth: '100vw' }}>
       <img src="https://www.pngall.com/wp-content/uploads/4/Pokeball-PNG-Free-Download.png" alt="Pokeball" className="opacity-10" style={{ width: '800px', height: 'auto', transform: 'translate(120%, -7%)' }} />
     </div>
 
-    {/* Contenu principal de la page */}
     <div className="mx-auto max-w-screen-xl mt-20">
-      {/* Image absolument positionnée qui ne devrait pas impacter le layout global */}
-      {/* Barre de recherche avec icône de loupe */}
       <div className="flex justify-center mb-4 rounded-xl z-10 relative">
         <div className="relative">
           <input
@@ -155,26 +156,25 @@ const PokemonList = ({pokemons}) => {
         onClick={toggleShowFavorites}
         className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center"
       >
-        {showFavorites ? 'Voir Tous' : 'Voir Favoris'}
+        {showFavorites ? 'Voir Favoris' : 'Voir Tous'}
       </button>
         </div>
         <button
-        onClick={() => { localStorage.removeItem('favorites'); }}
+        onClick={DeleteFavorite}
         className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center"
       >
         Clear Favoris
       </button>
       </div>
-      {/* Grille de cartes avec marges latérales */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
       {filter.map((pokemon, index) => (
-  <PokemonCard
-    key={pokemon.pokedex_id}
-    pokemon={pokemon}
-    pokemons={filter}
-    index={index}
-  />
-))}
+        <PokemonCard
+          key={pokemon.pokedex_id}
+          pokemon={pokemon}
+          pokemons={filter}
+          index={index}
+        />
+      ))}
       </div>
     </div>
   </div>

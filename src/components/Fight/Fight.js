@@ -125,7 +125,9 @@ const Fight = ({pokemons}) => {
         handleMoveUser()
         if (tmp_damage >= PokemonOpponent.stats.hp){
             SetConsole(['gagné', PokemonOpponent.name.fr+' est mort'])
-            navigate(`/`+PokemonUser.pokedex_id);
+            setTimeout(() => {
+                navigate(`/`+PokemonUser.pokedex_id);
+            }, 5000);
         }else{
             const tmp_console_all = [...[tmp_console], ...consoleInfo]
             SetConsole(tmp_console_all)
@@ -148,8 +150,10 @@ const Fight = ({pokemons}) => {
         SetdamageUser(tmp_damage)
         handleMoveOp();
         if (tmp_damage >= PokemonUser.stats.hp) {
+            setTimeout(() => {
+                navigate(`/pokedex`);
+            }, 5000);
             SetConsole(['perdu', PokemonUser.name.fr+' est mort'])
-            navigate(`/pokedex`);
         }else {
             SetConsole([...[tmp_console], ...console])
         }

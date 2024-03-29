@@ -5,28 +5,9 @@ const PokemonList = ({pokemons}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectType, setSelectType] = useState('all');
   const [selectGen, setSelectGen] = useState('all');
-  const [filter, setFilter] = useState([]);
-  const [type, setType] = useState([]);
-  const [showFavorites, setShowFavorites] = useState(false);
-
-const toggleShowFavorites = () => {
-  setShowFavorites(!showFavorites);
-};
-
-useEffect(() => {
-  if (showFavorites) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const filteredPokemons = pokemons.filter(pokemon => favorites.includes(pokemon.pokedex_id));
-    setFilter(filteredPokemons);
-  } else {
-    setFilter([...pokemons]);
-  }
-}, [pokemons, showFavorites]);
-
-  useEffect(() => {
-    setFilter([...pokemons]);
-    setType([...pokemons][1]?.resistances ?? []);
-  }, [pokemons]);
+  const [filter, setFilter] = useState([...pokemons]);
+  const [type, setType] = useState([...pokemons][1]?.resistances ?? []);
+  const [showFavorites, setShowFavorites] = useState(true);
 
   const ArrayGen = Array.from(Array(9).keys())
 
@@ -38,6 +19,11 @@ useEffect(() => {
     }
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
+    }
+
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
     }
 
     if (value === 'all') {
@@ -66,6 +52,11 @@ useEffect(() => {
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
     }
+
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
+    }
     const res = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(value.toLowerCase()))
     setFilter(res);
   }
@@ -82,6 +73,10 @@ useEffect(() => {
     if (searchTerm){
       tmp_filter = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(searchTerm.toLowerCase()))
     }
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
+    }
     if (value === 'all') {
       setFilter(tmp_filter);
     }else {
@@ -89,6 +84,35 @@ useEffect(() => {
       setFilter(res)
     }
   }
+
+  const toggleShowFavorites = () => {
+    setShowFavorites(!showFavorites);
+    //console.log(showFavorites)
+    let tmp_filter = [...pokemons]
+
+    if (selectType !== 'all') {
+      tmp_filter = tmp_filter.slice().filter( x =>{
+        const tmp = x.types?.map(y => y.name);
+        return tmp?.includes(selectType);
+      })
+    }
+    if (searchTerm){
+      tmp_filter = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+
+    if (selectGen !== 'all'){
+      tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
+    }
+
+    if (showFavorites) {
+      let tmp_filter  = [...filter];
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const filteredPokemons = tmp_filter.filter(pokemon => favorites.includes(pokemon.pokedex_id));
+      setFilter(filteredPokemons);
+    } else {
+      setFilter(tmp_filter)
+    }
+  };
 
   return (
     <div className="relative">

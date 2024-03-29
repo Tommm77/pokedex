@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './PokemonHome.css'; // Assurez-vous de créer ce fichier CSS pour le style
 import { Link } from 'react-router-dom';
 
@@ -73,6 +73,7 @@ const generateGrid = () => {
 
 
 const PokemonHome = () => {
+  const {id} = useParams();
   const [grid, setGrid] = useState(() => {
     const savedGrid = localStorage.getItem('pokemonGrid');
     return savedGrid ? JSON.parse(savedGrid) : generateGrid();
@@ -85,10 +86,11 @@ const PokemonHome = () => {
   
   const [playerDirection, setPlayerDirection] = useState(() => {
     const savedDirection = localStorage.getItem('playerDirection');
-    return savedDirection || 'down'; // 'down' est la valeur par défaut si rien n'est trouvé dans le localStorage
+    return savedDirection || 'down';
   });
   
   const [showAnimation, setShowAnimation] = useState(false);
+
   const navigate = useNavigate();
   const handleNewMap = () => {
     const newGrid = generateGrid();
@@ -158,7 +160,12 @@ const PokemonHome = () => {
                       // alert('Un Pokémon sauvage apparaît !');
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
-                        navigate('/Fight');
+                        if (id) {
+                          navigate('/Fight/'+ id);
+                        }else{
+                          navigate('/Fight');
+                        }
+                        
                       }, 1500);
                     }, 10);
                 }
@@ -174,22 +181,6 @@ const PokemonHome = () => {
   useEffect(() => {
     localStorage.setItem('playerDirection', playerDirection);
   }, [playerDirection]);
-
-  // // Fonction pour obtenir la classe CSS de direction
-  // const getPlayerDirectionClass = () => {
-  //   switch (playerDirection) {
-  //     case 'up':
-  //       return 'player-up';
-  //     case 'down':
-  //       return 'player-down';
-  //     case 'left':
-  //       return 'player-left';
-  //     case 'right':
-  //       return 'player-right';
-  //     default:
-  //       return '';
-  //   }
-  // };
 
   const handleKeyDown = (e) => {
     // Si une des touches fléchées est pressée, empêcher le défilement par défaut.

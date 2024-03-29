@@ -29,11 +29,14 @@ const getTypeGradient = (types) => {
   return typeColors[type] || 'bg-gradient-to-r from-grey-300 to-grey-700';
 };
 
-const PokemonCard = ({ pokemon }) => {
+const PokemonCard = ({ pokemon, pokemons, index }) => {
   const gradientClass = getTypeGradient(pokemon.types);
 
   return (
-    <Link to={`/pokemon/${pokemon.pokedex_id}`} state={{ pokemon }}>
+    <Link
+      to={`/pokemon/${pokemon.pokedex_id}`}
+      state={{ pokemon, pokemons, currentIndex: index }}
+    >
     <div className={`group rounded-xl overflow-hidden shadow-lg bg-gradient-to-b ${gradientClass} text-white p-4 m-2 flex flex-col justify-between transform transition duration-100 hover:scale-110 relative`}>
       <div className="absolute top-2 right-2 flex space-x-1">
         {pokemon.types?.map((type, index) => (

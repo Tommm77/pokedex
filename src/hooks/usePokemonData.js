@@ -9,7 +9,9 @@ const usePokemonData = () => {
     const fetchData = async () => {
       setLoading(true); // S'assurer que loading est vrai au début de l'appel
       try {
-        const data = await fetchPokemons();
+        let data = await fetchPokemons();
+        // Filtrer les pokémons pour exclure ceux avec l'ID 0
+        data = data.filter(pokemon => pokemon.pokedex_id !== 0);
         setPokemons(data);
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
@@ -19,7 +21,6 @@ const usePokemonData = () => {
 
     fetchData();
   }, []); // Vérifiez les dépendances du useEffect pour éviter les rendus infinis
-
 
   return { pokemons, loading };
 };

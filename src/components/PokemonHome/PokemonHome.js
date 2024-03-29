@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './PokemonHome.css'; // Assurez-vous de créer ce fichier CSS pour le style
 import { Link } from 'react-router-dom';
@@ -17,6 +17,9 @@ const minBushSize = 4;
 const roadDensity = 0.6; // Entre 0 et 1, où 1 signifie que toutes les cases non attribuées deviennent des routes
 
 const randomInRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const audioUrl = require('../../assets/combat01.mp3');
+const audioUrlRoute = require('../../assets/route01.mp3');
 
 const ensurePlayerSpawnArea = (grid) => {
   const centerX = Math.floor(gridSize / 2);
@@ -74,6 +77,7 @@ const generateGrid = () => {
 
 const PokemonHome = () => {
   const {id} = useParams();
+  const audioRef = useRef(null);
   const [grid, setGrid] = useState(() => {
     const savedGrid = localStorage.getItem('pokemonGrid');
     return savedGrid ? JSON.parse(savedGrid) : generateGrid();
@@ -90,6 +94,7 @@ const PokemonHome = () => {
   });
   
   const [showAnimation, setShowAnimation] = useState(false);
+  const [isCombat, setIsCombat] = useState(false);
 
   const navigate = useNavigate();
   const handleNewMap = () => {
@@ -107,6 +112,22 @@ const PokemonHome = () => {
 
   useEffect(() => {
     const movePlayer = (e) => {
+      if (isCombat) {
+        return;
+      }
+      const playAudio = () => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play()
+            .then(() => {
+              setTimeout(() => {
+                audio.pause();
+                audio.currentTime = 0;
+              }, 1500);
+            })
+            .catch(err => console.log("Erreur de lecture audio", err));
+        }
+      };
       let newX = playerPosition.x;
       let newY = playerPosition.y;
       let direction = playerDirection;
@@ -156,8 +177,9 @@ const PokemonHome = () => {
                 // Vérification pour la rencontre de Pokémon dans les buissons
                 if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
                     console.log('Un Pokémon sauvage apparaît !');
+                    setIsCombat(true);
                     setTimeout(() => {
-                      // alert('Un Pokémon sauvage apparaît !');
+                      playAudio();
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
                         if (id) {
@@ -195,6 +217,7 @@ const PokemonHome = () => {
     <h1 className="title">Projet Pokedex</h1>
   </header>
   <main className="flex justify-center"> {/* Assure que le contenu principal couvre au moins toute la hauteur de l'écran */}
+    <audio ref={audioRef} src={audioUrl} hidden />
     <div className="flex flex-col sm:flex-row justify-between items-center w-full px-4"> {/* Utilise flex-col pour les écrans mobiles et flex-row pour les écrans plus grands */}
       <div className="w-full flex-col justify-center items-center mb-4 sm:mb-0"> {/* Ajoute une marge en bas uniquement sur les écrans mobiles */}
         <div 

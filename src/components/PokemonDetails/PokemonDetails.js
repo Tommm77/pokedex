@@ -100,10 +100,10 @@ const handleNextPokemon = () => {
   <button onClick={handleFight} className={`absolute top-4 left-2 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100 ml-32`}>
     ⚔️ Combat
   </button>
-  <button onClick={handlePrevPokemon} className={`absolute bottom-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+  <button onClick={handlePrevPokemon} className={`absolute -bottom-16 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
   ← Précédent
   </button>
-  <button onClick={handleNextPokemon} className={`absolute bottom-4 right-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+  <button onClick={handleNextPokemon} className={`absolute -bottom-16 right-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
     Suivant →
   </button>
   <div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd} className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
@@ -170,6 +170,16 @@ const handleNextPokemon = () => {
         <span>Mega {pokemon.name.fr}</span>
       </div>
     ))}
+<div className="mt-6">
+  <h2 className="text-xl font-bold mb-4">Résistances</h2>
+  <div className="flex flex-wrap justify-center items-center">
+    {pokemon.resistances.map((resistance, index) => (
+      <div key={index} className={`inline-flex items-center justify-center ${getBackgroundColor(resistance.name)} border border-gray-200 rounded-full px-4 py-1 m-1`}>
+        <span className="text-white font-semibold">{resistance.name} x{resistance.multiplier}</span>
+      </div>
+    ))}
+  </div>
+</div>
   </div>
 </div>
 

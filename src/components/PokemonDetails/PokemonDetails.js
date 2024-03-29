@@ -1,11 +1,41 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import './FavAnimation.css'
 
 const PokemonDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { pokemon } = location.state || {};
+  const getFilterClassName = (type) => `filter-${type}`;
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setIsFavorite(favorites.includes(pokemon.pokedex_id));
+  }, [pokemon.pokedex_id]);
+
+
+  const handleToggleFavorite = () => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if (favorites.includes(pokemon.pokedex_id)) {
+      const filteredFavorites = favorites.filter(id => id !== pokemon.pokedex_id);
+      localStorage.setItem('favorites', JSON.stringify(filteredFavorites));
+      setIsFavorite(false);
+    } else {
+      setIsAnimating(true);
+      localStorage.setItem('favorites', JSON.stringify([...favorites, pokemon.pokedex_id]));
+      setIsFavorite(true);
+    }
+  };
+
+  const handleAnimationEnd = () => {
+    setIsAnimating(false);
+  };
+
 
   if (!pokemon) return <div>Aucun Pokémon sélectionné.</div>;
+
 
   // Définition des couleurs des types pour les barres de stats et les bordures des types
   const typeColors = {
@@ -30,25 +60,43 @@ const PokemonDetails = () => {
   };
 
   const getBackgroundColor = (type) => typeColors[type] || 'bg-gray-200';
+  const filterClassName = getFilterClassName(pokemon.types[0].name);
   const getStatWidth = (value) => `${(value / 130) * 100}%`;
 
+
+  const handleBackToPokedex = () => {
+    navigate("/");
+  };
+
   return (
-    <div className="flex flex-col md:flex-row p-4">
-      <div className="flex-1 text-center">
-        <h1 className="text-2xl font-bold mb-2">{pokemon.name.fr}</h1>
-        <img src={pokemon.sprites.regular} alt={pokemon.name.fr} className="mx-auto my-4 w-1/2 md:w-full lg:w-3/4" />
-        <div className="flex justify-center flex-wrap">
-          {pokemon.types.map((type, index) => (
-            <div key={index} className={`inline-flex items-center ${getBackgroundColor(type.name)} border border-gray-200 rounded-xl px-3 py-1 m-1`}>
-              <img src={type.image} alt={type.name} className="w-6 h-6 mr-2" />
-              {type.name}
-            </div>
-          ))}
-        </div>
+    <div className="relative flex flex-col md:flex-row p-4 items-center justify-center">
+      <button onClick={handleBackToPokedex} className={`absolute top-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+  ← Pokedex
+</button>
+<div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd}
+        className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
       </div>
 
 
-      <div className="flex-1 mt-4 md:mt-0 md:ml-8">
+      <div className="flex-1 text-center mt-32">
+      <div className="flex flex-col items-center">
+  <h1 className="text-2xl font-bold mb-0">{pokemon.name.fr}</h1>
+  <img src={pokemon.sprites.regular} alt={pokemon.name.fr} className="z-1 w-1/2 md:w-full lg:w-3/4 -mt-16 fdp" />
+</div>
+<div className="flex justify-center flex-wrap mt-2">
+  {pokemon.types.map((type, index) => (
+    <div key={index} className={`inline-flex items-center ${getBackgroundColor(type.name)} border border-gray-200 rounded-xl px-3 py-1 m-1`}>
+      <img src={type.image} alt={type.name} className="w-6 h-6 mr-2" />
+      <div className="text-white font-semibold">
+        {type.name}
+      </div>
+    </div>
+  ))}
+</div>
+</div>
+
+
+      <div className="flex-1 mt-4 md:mt-36 md:ml-8">
     <h2 className="text-xl font-bold mb-4">Stats</h2>
     {Object.entries(pokemon.stats).map(([key, value]) => (
         <div key={key} className="mb-2 flex items-center">
@@ -66,7 +114,7 @@ const PokemonDetails = () => {
   <div className="mt-2 flex flex-wrap justify-center">
     {/* Affichage des évolutions précédentes, s'il y en a */}
     {pokemon.evolution?.pre && pokemon.evolution?.pre.map(ev => (
-      <div key={ev.pokedex_id} className="text-center p-2">
+      <div key={ev.pokedex_id} className="text-center p-2 z-1">
         <img src={`https://raw.githubusercontent.com/Yarkis01/TyraDex/images/sprites/${ev.pokedex_id}/regular.png`} alt={ev.name} className="w-24 h-24 mx-auto" />
         <span>{ev.name}</span>
       </div>
@@ -93,6 +141,17 @@ const PokemonDetails = () => {
   </div>
 </div>
 
+
+
+
+
+
+      </div>
+      <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${filterClassName}`} style={{width: '51rem'}}>
+        <img src="https://www.pngall.com/wp-content/uploads/4/Pokeball-PNG-Free-Download.png"
+             alt="Pokeball"
+             className="w-full h-auto opacity-30"
+        />
       </div>
     </div>
 

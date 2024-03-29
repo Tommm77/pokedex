@@ -1,0 +1,73 @@
+.pokemon-home-container {
+  text-align: center; /* Centre le titre et tout le contenu */
+}
+
+.header_home {
+  padding: 20px 0; /* Ajoute un peu d'espace autour du titre */
+  background-color: #f8f9fa; /* Une couleur de fond légère pour le header */
+  margin-bottom: 20px; /* Espace avant le contenu principal */
+}
+
+.title {
+  font-size: 2.5rem; /* Grande taille pour le titre */
+  color: #333; /* Couleur foncée pour le texte */
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+}
+
+.cell_gray {
+  background-image: url('../../assets/gris.png');
+}
+
+.cell_green {
+  background-image: url('../../assets/vert.png');
+  background-size: cover;
+}
+
+.cell_blue {
+  background-image: url('../../assets/bleu.png');
+  /* background-size: cover; */
+  /* background-color: blue; */
+}
+
+.player-img {
+  width: 20px; /* Assurez-vous que cela correspond à la taille de votre cellule */
+  height: 20px;
+  object-fit: cover; /* Cela garantit que l'image couvre la cellule sans déformation */
+}
+
+@keyframes zoomIntoBattle {
+  0% {
+    opacity: 1;
+    background-color: transparent;
+  }
+  30% {
+    opacity: 0.8;
+    background-size: 150%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('../../assets/vert.png');
+  }
+  60% {
+    opacity: 0;
+    background-color: black;
+  }
+  100% {
+    opacity: 1;
+    background-color: black;
+  }
+}
+
+.battleAnimation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  animation: zoomIntoBattle 1.5s forwards;
+}
+

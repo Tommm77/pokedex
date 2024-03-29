@@ -137,9 +137,14 @@ useEffect(() => {
       </div>
       {/* Grille de cartes avec marges latérales */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-        {filter.map(pokemon => (
-          <PokemonCard key={pokemon.pokedex_id} pokemon={pokemon} />
-        ))}
+      {filter.map((pokemon, index) => (
+  <PokemonCard
+    key={pokemon.pokedex_id}
+    pokemon={pokemon}
+    pokemons={filter}
+    index={index}
+  />
+))}
       </div>
     </div>
   </div>

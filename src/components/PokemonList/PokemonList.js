@@ -1,32 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
 const PokemonList = ({pokemons}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectType, setSelectType] = useState('all');
   const [selectGen, setSelectGen] = useState('all');
-  const [filter, setFilter] = useState([]);
-  const [type, setType] = useState([]);
-  const [showFavorites, setShowFavorites] = useState(false);
-
-const toggleShowFavorites = () => {
-  setShowFavorites(!showFavorites);
-};
-
-useEffect(() => {
-  if (showFavorites) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const filteredPokemons = pokemons.filter(pokemon => favorites.includes(pokemon.pokedex_id));
-    setFilter(filteredPokemons);
-  } else {
-    setFilter([...pokemons]);
-  }
-}, [pokemons, showFavorites]);
-
-  useEffect(() => {
-    setFilter([...pokemons]);
-    setType([...pokemons][1]?.resistances ?? []);
-  }, [pokemons]);
+  const [filter, setFilter] = useState([...pokemons]);
+  const [type] = useState([...pokemons][1]?.resistances ?? []);
+  const [showFavorites, setShowFavorites] = useState(true);
 
   const ArrayGen = Array.from(Array(9).keys())
 
@@ -38,6 +19,11 @@ useEffect(() => {
     }
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
+    }
+
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
     }
 
     if (value === 'all') {
@@ -66,6 +52,11 @@ useEffect(() => {
     if (selectGen !== 'all'){
       tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
     }
+
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
+    }
     const res = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(value.toLowerCase()))
     setFilter(res);
   }
@@ -82,6 +73,10 @@ useEffect(() => {
     if (searchTerm){
       tmp_filter = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(searchTerm.toLowerCase()))
     }
+    if (!showFavorites) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      tmp_filter = tmp_filter.slice().filter(pokemon => favorites.includes(pokemon.pokedex_id));
+    }
     if (value === 'all') {
       setFilter(tmp_filter);
     }else {
@@ -90,17 +85,47 @@ useEffect(() => {
     }
   }
 
+  const toggleShowFavorites = () => {
+    setShowFavorites(!showFavorites);
+    //console.log(showFavorites)
+    let tmp_filter = [...pokemons]
+
+    if (selectType !== 'all') {
+      tmp_filter = tmp_filter.slice().filter( x =>{
+        const tmp = x.types?.map(y => y.name);
+        return tmp?.includes(selectType);
+      })
+    }
+    if (searchTerm){
+      tmp_filter = tmp_filter.slice().filter(x => x.name.fr.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+
+    if (selectGen !== 'all'){
+      tmp_filter = tmp_filter.slice().filter( (x) => x.generation.toString() === selectGen );
+    }
+
+    if (showFavorites) {
+      let tmp_filter  = [...filter];
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const filteredPokemons = tmp_filter.filter(pokemon => favorites.includes(pokemon.pokedex_id));
+      setFilter(filteredPokemons);
+    } else {
+      setFilter(tmp_filter)
+    }
+  };
+
+  const DeleteFavorite = () => {
+    localStorage.removeItem('favorites');
+    toggleShowFavorites();
+  }
+
   return (
     <div className="relative">
-    {/* Conteneur pour le cropping de l'image */}
     <div className="overflow-hidden absolute top-0 right-0 z-0 -mr-100" style={{ width: '100%', height: '100vh', maxWidth: '100vw' }}>
       <img src="https://www.pngall.com/wp-content/uploads/4/Pokeball-PNG-Free-Download.png" alt="Pokeball" className="opacity-10" style={{ width: '800px', height: 'auto', transform: 'translate(120%, -7%)' }} />
     </div>
 
-    {/* Contenu principal de la page */}
     <div className="mx-auto max-w-screen-xl mt-20">
-      {/* Image absolument positionnée qui ne devrait pas impacter le layout global */}
-      {/* Barre de recherche avec icône de loupe */}
       <div className="flex justify-center mb-4 rounded-xl z-10 relative">
         <div className="relative">
           <input
@@ -131,26 +156,25 @@ useEffect(() => {
         onClick={toggleShowFavorites}
         className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center"
       >
-        {showFavorites ? 'Voir Tous' : 'Voir Favoris'}
+        {showFavorites ? 'Voir Favoris' : 'Voir Tous'}
       </button>
         </div>
         <button
-        onClick={() => { localStorage.removeItem('favorites'); }}
+        onClick={DeleteFavorite}
         className="w-30 h-10 p-2 border rounded-xl bg-gray-200 text-gray-100 ml-4 text-center"
       >
         Clear Favoris
       </button>
       </div>
-      {/* Grille de cartes avec marges latérales */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-      {filter.map((pokemon, index) => (
-  <PokemonCard
-    key={pokemon.pokedex_id}
-    pokemon={pokemon}
-    pokemons={filter}
-    index={index}
-  />
-))}
+      {filter.filter( x => x.pokedex_id !== 0).map((pokemon, index) => (
+        <PokemonCard
+          key={pokemon.pokedex_id}
+          pokemon={pokemon}
+          pokemons={filter}
+          index={index}
+        />
+      ))}
       </div>
     </div>
   </div>

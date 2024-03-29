@@ -77,7 +77,10 @@ const generateGrid = () => {
 
 const PokemonHome = () => {
   const {id} = useParams();
-  const audioRef = useRef(null);
+  const [playMusique, setplayMusique] = useState(false);
+  const routeAudioRef = useRef(null);
+  const combatAudioRef = useRef(null);
+  
   const [grid, setGrid] = useState(() => {
     const savedGrid = localStorage.getItem('pokemonGrid');
     return savedGrid ? JSON.parse(savedGrid) : generateGrid();
@@ -104,10 +107,15 @@ const PokemonHome = () => {
     localStorage.setItem('playerPosition', JSON.stringify({ x: parseInt(gridSize / 2), y: parseInt(gridSize / 2) }));
     localStorage.setItem('playerDirection', 'down');
   };
-  
+
   // À chaque fois que la grille change, l'enregistrer dans le localStorage
   useEffect(() => {
     localStorage.setItem('pokemonGrid', JSON.stringify(grid));
+    const routeAudio = routeAudioRef.current;
+    if (routeAudio) {
+      routeAudio.pause();
+      routeAudio.currentTime = 0; // Réinitialiser pour une future lecture
+    }
   }, [grid]);
 
   useEffect(() => {
@@ -115,17 +123,17 @@ const PokemonHome = () => {
       if (isCombat) {
         return;
       }
-      const playAudio = () => {
-        const audio = audioRef.current;
-        if (audio) {
-          audio.play()
+      const playCombatAudio = () => {
+        const combatAudio = combatAudioRef.current;
+        if (combatAudio) {
+          combatAudio.play()
             .then(() => {
               setTimeout(() => {
-                audio.pause();
-                audio.currentTime = 0;
-              }, 1500);
+                combatAudio.pause();
+                combatAudio.currentTime = 0;
+              }, 2000); // Durée de l'audio de combat
             })
-            .catch(err => console.log("Erreur de lecture audio", err));
+            .catch(err => console.log("Erreur de lecture audio de combat", err));
         }
       };
       let newX = playerPosition.x;
@@ -177,9 +185,14 @@ const PokemonHome = () => {
                 // Vérification pour la rencontre de Pokémon dans les buissons
                 if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
                     console.log('Un Pokémon sauvage apparaît !');
+                    const routeAudio = routeAudioRef.current;
+                    if (routeAudio) {
+                      routeAudio.pause();
+                      routeAudio.currentTime = 0; // Réinitialiser pour une future lecture
+                    }
                     setIsCombat(true);
                     setTimeout(() => {
-                      playAudio();
+                      playCombatAudio();
                       setShowAnimation(true); // Déclenche l'animation
                       setTimeout(() => {
                         if (id) {
@@ -208,6 +221,11 @@ const PokemonHome = () => {
     // Si une des touches fléchées est pressée, empêcher le défilement par défaut.
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       e.preventDefault();
+      const routeAudio = routeAudioRef.current;
+      if (routeAudio) {
+        routeAudio.play()
+          .catch(err => console.log("Erreur lors de la tentative de jouer l'audio de la route", err));
+      }
     }
   };
 
@@ -217,7 +235,8 @@ const PokemonHome = () => {
     <h1 className="title">Projet Pokedex</h1>
   </header>
   <main className="flex justify-center"> {/* Assure que le contenu principal couvre au moins toute la hauteur de l'écran */}
-    <audio ref={audioRef} src={audioUrl} hidden />
+    <audio ref={routeAudioRef} src={audioUrlRoute} loop hidden />
+    <audio ref={combatAudioRef} src={audioUrl} hidden />
     <div className="flex flex-col sm:flex-row justify-between items-center w-full px-4"> {/* Utilise flex-col pour les écrans mobiles et flex-row pour les écrans plus grands */}
       <div className="w-full flex-col justify-center items-center mb-4 sm:mb-0"> {/* Ajoute une marge en bas uniquement sur les écrans mobiles */}
         <div 

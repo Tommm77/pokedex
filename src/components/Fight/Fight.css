@@ -1,0 +1,21 @@
+.container-battle {
+    position: relative; /* Assurez-vous que la position est relative pour utiliser les pseudo-éléments */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+}
+
+.container-battle::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    background-image: url('../../assets/fond.png'); /* URL de l'image */
+    background-repeat: no-repeat; /* Afficher l'image une seule fois */
+    background-position: center; /* Position de l'image au centre */
+    background-size: 15%; /* Redimensionner l'image pour couvrir toute la zone */
+    opacity: 0.2; /* Opacité de l'image de fond */
+    transform: rotate(315deg); /* Rotation de l'image de fond */
+    z-index: -1; /* Assurez-vous que l'image de fond est derrière le contenu */
+}

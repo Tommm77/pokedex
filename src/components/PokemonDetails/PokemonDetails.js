@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './FavAnimation.css'
 
 const PokemonDetails = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { pokemon } = location.state || {};
   const getFilterClassName = (type) => `filter-${type}`;
   const [isFavorite, setIsFavorite] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const { state } = useLocation();
+  const { pokemon, pokemons, currentIndex } = state;
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -28,6 +28,25 @@ const PokemonDetails = () => {
       setIsFavorite(true);
     }
   };
+
+
+const navigateToPokemon = (newIndex) => {
+  const newPokemon = pokemons[newIndex];
+  navigate(`/pokemon/${newPokemon.pokedex_id}`, {
+    state: { pokemon: newPokemon, pokemons, currentIndex: newIndex },
+  });
+};
+
+const handlePrevPokemon = () => {
+  const newIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : pokemons.length - 1;
+  navigateToPokemon(newIndex);
+};
+
+const handleNextPokemon = () => {
+  const newIndex = (currentIndex + 1) % pokemons.length;
+  navigateToPokemon(newIndex);
+};
+
 
   const handleFight = () => {
     navigate(`/Fight/${pokemon.pokedex_id}`);
@@ -75,15 +94,20 @@ const PokemonDetails = () => {
 
   return (
     <div className="relative flex flex-col md:flex-row p-4 items-center justify-center">
-      <button onClick={handleBackToPokedex} className={`absolute top-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
-  ← Pokedex
-</button>
-<button onClick={handleFight} className={`absolute top-4 left-2 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100 ml-32`}>
-       ⚔️ Combat
-      </button>
-<div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd}
-        className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
-      </div>
+  <button onClick={handleBackToPokedex} className={`absolute top-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+    ← Pokedex
+  </button>
+  <button onClick={handleFight} className={`absolute top-4 left-2 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100 ml-32`}>
+    ⚔️ Combat
+  </button>
+  <button onClick={handlePrevPokemon} className={`absolute bottom-4 left-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+  ← Précédent
+  </button>
+  <button onClick={handleNextPokemon} className={`absolute bottom-4 right-4 text-white px-4 py-2 rounded-xl shadow transition ease-in-out duration-150 ${getBackgroundColor(pokemon.types[0].name)} opacity-50 hover:opacity-100`}>
+    Suivant →
+  </button>
+  <div onClick={handleToggleFavorite} onAnimationEnd={handleAnimationEnd} className={`fav fav-star absolute top-4 right-4 ${isFavorite ? 'fav-star-favorite' : ''} ${isAnimating ? 'is-animating' : ''}`}>
+  </div>
 
 
       <div className="flex-1 text-center mt-32">

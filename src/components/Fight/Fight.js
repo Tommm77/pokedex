@@ -80,7 +80,11 @@ const Fight = ({pokemons}) => {
         const resist = pokemonDef.resistances.filter( (x) => typeAtk.includes(x.name)).map( x=> parseFloat(x.multiplier))
         resist.reduce( (acc, x) => acc * x )
         const random = Math.floor(Math.random() * 5) + 1;
-        atk *= resist.reduce((acc, x) => acc * x )
+        if (resist === 0) {
+            atk *= 0.75; //valeur par default si les deux pokemons sont uniquement du même type
+        } else{
+            atk *= resist.reduce((acc, x) => acc * x )
+        }
         return Math.round(atk * random);
     }
 
@@ -162,10 +166,11 @@ const Fight = ({pokemons}) => {
     return (
         <div className='container-battle'>
             <div className='grid grid-cols-6 mt-20'>
+                <div className='col-start-2 col-span-2 border-t-2 border-l-2 border-black rounded-tl-md pt-2'></div>
                 {/*pokemon opponent*/}
-                <div className='col-start-4 col-span-2'>
+                <div className='col-start-4 col-span-2 border-t-2 border-r-2 border-black rounded-tr-md pt-2'>
                     <div className='grid gril-cols-2'>
-                        <div className='col-start-1'> 
+                        <div className='col-start-1 '> 
                             <div style={{width: '10em', marginLeft: '2em'}}>
                                 <div className='w-full flex'>
                                     <p className='text-xl'>{PokemonOpponent.name.fr}</p>
@@ -198,7 +203,7 @@ const Fight = ({pokemons}) => {
                 </div>
 
                 {/*pokemon user*/}
-                <div className='col-start-2 col-span-2'>
+                <div className='col-start-2 col-span-2 border-l-2 border-black'>
                     <div className='grid gril-cols-2'>
                         <div className='col-start-1'>
                             <img 
@@ -235,10 +240,11 @@ const Fight = ({pokemons}) => {
                         </div>
                     </div>
                 </div>
+                <div className='col-start-4 col-span-2 border-r-2 border-black pb-4'></div>
 
                 {/*console*/}
-                <div className='col-start-2 col-span-4 mt-2'>
-                    <div className='grid grid-col-2 mt-10'>
+                <div className='col-start-2 col-span-4'>
+                    <div className='grid grid-col-2'>
                         <div className='col-start-1 w-full border-2 border-black rounded-lg p-1'>
                             <p className='flex underline'>console:</p>
                             <div>

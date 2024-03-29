@@ -77,7 +77,6 @@ const generateGrid = () => {
 
 const PokemonHome = () => {
   const {id} = useParams();
-  const [playMusique, setplayMusique] = useState(false);
   const routeAudioRef = useRef(null);
   const combatAudioRef = useRef(null);
   
@@ -119,113 +118,110 @@ const PokemonHome = () => {
   }, [grid]);
 
   useEffect(() => {
-    const movePlayer = (e) => {
-      if (isCombat) {
-        return;
-      }
-      const playCombatAudio = () => {
-        const combatAudio = combatAudioRef.current;
-        if (combatAudio) {
-          combatAudio.play()
-            .then(() => {
-              setTimeout(() => {
-                combatAudio.pause();
-                combatAudio.currentTime = 0;
-              }, 2000); // Durée de l'audio de combat
-            })
-            .catch(err => console.log("Erreur de lecture audio de combat", err));
-        }
-      };
-      let newX = playerPosition.x;
-      let newY = playerPosition.y;
-      let direction = playerDirection;
-      if (e.key == 'ArrowUp' || e.key == 'ArrowDown'|| e.key == 'ArrowLeft'|| e.key == 'ArrowRight') {
-        switch (e.key) {
-            case 'ArrowUp':
-              if (newY > 0) {
-                if (grid[newY - 1][newX] !== 'blue') {
-                    newY--;
-                }
-                direction = 'up';
-              }
-              break;
-            case 'ArrowDown':
-              if (newY < gridSize - 1) {
-                if (grid[newY + 1][newX] !== 'blue') {
-                    newY++;
-                }
-                direction = 'down';
-              }
-              break;
-            case 'ArrowLeft':
-              if (newX > 0) {
-                if (grid[newY][newX - 1] !== 'blue') {
-                    newX--;
-                }
-                direction = 'left';
-              }
-              break;
-            case 'ArrowRight':
-              if (newX < gridSize - 1) {
-                if (grid[newY][newX + 1] !== 'blue') {
-                    newX++;
-                }
-                direction = 'right';
-              }
-              break;
-          }
-          console.log(grid[newY][newX]);
-          // Mettre à jour la position et la direction du joueur
-          if (grid[newY][newX] !== 'blue') {
-            setPlayerPosition({ x: newX, y: newY });
-            localStorage.setItem('playerPosition', JSON.stringify({ x: newX, y: newY }));
-            setPlayerDirection(direction);
-            console.log('couleur non bleu');
-            if (newX !== playerPosition.x || newY !== playerPosition.y) {
-                // Vérification pour la rencontre de Pokémon dans les buissons
-                if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
-                    console.log('Un Pokémon sauvage apparaît !');
-                    const routeAudio = routeAudioRef.current;
-                    if (routeAudio) {
-                      routeAudio.pause();
-                      routeAudio.currentTime = 0; // Réinitialiser pour une future lecture
-                    }
-                    setIsCombat(true);
-                    setTimeout(() => {
-                      playCombatAudio();
-                      setShowAnimation(true); // Déclenche l'animation
-                      setTimeout(() => {
-                        if (id) {
-                          navigate('/Fight/'+ id);
-                        }else{
-                          navigate('/Fight');
-                        }
-                        
-                      }, 1500);
-                    }, 10);
-                }
-            }
-          }
-        };
-      }
-
-
-    window.addEventListener('keydown', movePlayer);
-    return () => window.removeEventListener('keydown', movePlayer);
-  }, [playerPosition]);
-  useEffect(() => {
     localStorage.setItem('playerDirection', playerDirection);
   }, [playerDirection]);
 
   const handleKeyDown = (e) => {
+    const routeAudio = routeAudioRef.current;
+    if (routeAudio) {
+      routeAudio.play()
+        .catch(err => console.log("Erreur lors de la tentative de jouer l'audio de la route", err));
+    }
     // Si une des touches fléchées est pressée, empêcher le défilement par défaut.
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       e.preventDefault();
-      const routeAudio = routeAudioRef.current;
-      if (routeAudio) {
-        routeAudio.play()
-          .catch(err => console.log("Erreur lors de la tentative de jouer l'audio de la route", err));
-      }
+      const movePlayer = (e) => {
+        console.log(isCombat);
+        if (isCombat) {
+          // Ne rien faire si le curseur n'est pas dans grid_game ou si un combat est en cours
+          return;
+        }
+        const playCombatAudio = () => {
+          const combatAudio = combatAudioRef.current;
+          if (combatAudio) {
+            combatAudio.play()
+              .then(() => {
+                setTimeout(() => {
+                  combatAudio.pause();
+                  combatAudio.currentTime = 0;
+                }, 2000); // Durée de l'audio de combat
+              })
+              .catch(err => console.log("Erreur de lecture audio de combat", err));
+          }
+        };
+        let newX = playerPosition.x;
+        let newY = playerPosition.y;
+        let direction = playerDirection;
+        if (e.key == 'ArrowUp' || e.key == 'ArrowDown'|| e.key == 'ArrowLeft'|| e.key == 'ArrowRight') {
+          switch (e.key) {
+              case 'ArrowUp':
+                if (newY > 0) {
+                  if (grid[newY - 1][newX] !== 'blue') {
+                      newY--;
+                  }
+                  direction = 'up';
+                }
+                break;
+              case 'ArrowDown':
+                if (newY < gridSize - 1) {
+                  if (grid[newY + 1][newX] !== 'blue') {
+                      newY++;
+                  }
+                  direction = 'down';
+                }
+                break;
+              case 'ArrowLeft':
+                if (newX > 0) {
+                  if (grid[newY][newX - 1] !== 'blue') {
+                      newX--;
+                  }
+                  direction = 'left';
+                }
+                break;
+              case 'ArrowRight':
+                if (newX < gridSize - 1) {
+                  if (grid[newY][newX + 1] !== 'blue') {
+                      newX++;
+                  }
+                  direction = 'right';
+                }
+                break;
+            }
+            console.log(grid[newY][newX]);
+            // Mettre à jour la position et la direction du joueur
+            if (grid[newY][newX] !== 'blue') {
+              setPlayerPosition({ x: newX, y: newY });
+              localStorage.setItem('playerPosition', JSON.stringify({ x: newX, y: newY }));
+              setPlayerDirection(direction);
+              console.log('couleur non bleu');
+              if (newX !== playerPosition.x || newY !== playerPosition.y) {
+                  // Vérification pour la rencontre de Pokémon dans les buissons
+                  if (grid[newY][newX] === 'green' && Math.random() < 0.15) {
+                      console.log('Un Pokémon sauvage apparaît !');
+                      const routeAudio = routeAudioRef.current;
+                      if (routeAudio) {
+                        routeAudio.pause();
+                        routeAudio.currentTime = 0; // Réinitialiser pour une future lecture
+                      }
+                      setIsCombat(true);
+                      setTimeout(() => {
+                        playCombatAudio();
+                        setShowAnimation(true); // Déclenche l'animation
+                        setTimeout(() => {
+                          if (id) {
+                            navigate('/Fight/'+ id);
+                          }else{
+                            navigate('/Fight');
+                          }
+                          
+                        }, 1500);
+                      }, 10);
+                  }
+              }
+            }
+          };
+        }
+      movePlayer(e);
     }
   };
 
@@ -234,7 +230,7 @@ const PokemonHome = () => {
   <header className="header_home">
     <h1 className="title">Projet Pokedex</h1>
   </header>
-  <main className="flex justify-center"> {/* Assure que le contenu principal couvre au moins toute la hauteur de l'écran */}
+  <main className="flex justify-center "> {/* Assure que le contenu principal couvre au moins toute la hauteur de l'écran */}
     <audio ref={routeAudioRef} src={audioUrlRoute} loop hidden />
     <audio ref={combatAudioRef} src={audioUrl} hidden />
     <div className="flex flex-col sm:flex-row justify-between items-center w-full px-4"> {/* Utilise flex-col pour les écrans mobiles et flex-row pour les écrans plus grands */}
